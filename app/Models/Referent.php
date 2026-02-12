@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Referent extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'team_id',
         'name',
@@ -25,5 +25,15 @@ class Referent extends Model
     public function shipments()
     {
         return $this->hasMany(Shipment::class);
+    }
+
+    public function teams()
+    {
+        return $this->belongsToMany(
+            Team::class,
+            'referent_team',
+            'referent_id',
+            'team_id'
+        )->withTimestamps();
     }
 }

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Team extends Model
 {
     use HasFactory;
-    
+
     protected $guarded = ['id'];
 
     public function users()
@@ -19,5 +19,15 @@ class Team extends Model
     public function shipments()
     {
         return $this->hasMany(Shipment::class);
+    }
+
+    public function referents()
+    {
+        return $this->belongsToMany(
+            Referent::class,
+            'referent_team',
+            'team_id',
+            'referent_id'
+        )->withTimestamps();
     }
 }

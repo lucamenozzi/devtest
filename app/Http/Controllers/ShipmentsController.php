@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Referent;
 use App\Models\Shipment;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -54,13 +55,23 @@ class ShipmentsController extends Controller
         ]);
         $validated['team_id'] = $shipment->team_id;
 
+        $referent = Referent::where('name', $validated['name'])
+            ->where('last_name', $validated['last_name'])
+            ->where('phone', $validated['phone'])
+            ->where('email', $validated['email'])
+            ->first();
 
-
-        $referent = $shipment->referents()->create($validated);
+        if (is_null($referent)) {
+            $referent = $shipment->referents()->create($validated);
+        }
 
         $shipment->referents()->syncWithoutDetaching([
             $referent->id => ['scope' => $request->get('scope')],
         ]);
+
+        $referent->teams()->syncWithoutDetaching($shipment->team_id);
+
+
 
         return response()->json($referent, 201);
     }
