@@ -59,6 +59,18 @@ class ShipmentsController extends Controller
         return response()->json($referent, 201);
     }
 
+    public function addReferentToPoint(Request $request, Shipment $shipment)
+    {
+        $referentId = $request->get('referentId');
+        $scope = $request->get('scope');
+
+        $shipment->referents()->attach([
+            $referentId => ['scope' => $scope]
+        ]);
+
+        return response()->json([], 201);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReferentController;
 use App\Http\Controllers\ShipmentsController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,6 +24,8 @@ Route::middleware([
     Route::get('/shipments', [ShipmentsController::class, 'index'])->name('shipments.index');
     Route::get('/shipments/{shipment}/show', [ShipmentsController::class, 'show'])->name('shipments.show');
     Route::post('/shipments/{shipment}/addReferent', [ShipmentsController::class, 'addReferent'])->name('shipments.add_referent');
+    Route::post('/shipments/{shipment}/addReferentToPoint', [ShipmentsController::class, 'addReferentToPoint'])->name('shipments.add_referent_to_point');
+    Route::get('/referent/search', [ReferentController::class, 'searchReferent'])->name('referent.search_referent');
 });
 
 require __DIR__ . '/settings.php';
