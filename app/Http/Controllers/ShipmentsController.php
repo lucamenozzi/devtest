@@ -14,7 +14,7 @@ class ShipmentsController extends Controller
     public function index()
     {
         return Inertia::render('Shipments/Index', [
-            'shipments' => Shipment::with('referents','team')->limit(100)->get(),
+            'shipments' => Shipment::with('referents', 'team')->limit(100)->get(),
         ]);
     }
 
@@ -54,7 +54,13 @@ class ShipmentsController extends Controller
         ]);
         $validated['team_id'] = $shipment->team_id;
 
+
+
         $referent = $shipment->referents()->create($validated);
+
+        $shipment->referents()->syncWithoutDetaching([
+            $referent->id => ['scope' => $request->get('scope')],
+        ]);
 
         return response()->json($referent, 201);
     }
@@ -65,7 +71,7 @@ class ShipmentsController extends Controller
         $scope = $request->get('scope');
 
         $shipment->referents()->attach([
-            $referentId => ['scope' => $scope]
+            $referentId => ['scope' => $scope],
         ]);
 
         return response()->json([], 201);
