@@ -13,11 +13,12 @@ class ReferentController extends Controller
         $referentToFind = $request->get('search');
         $shipmentId = $request->get('shipmentId');
         $scope = $request->get('scope');
-        $teamId = Shipment::find($shipmentId)->team_id;
+        //$teamId = Shipment::find($shipmentId)->team_id;
 
-        $referents = Referent::
-            where('name', 'like', "%{$referentToFind}%")
-            ->orWhere('last_name', 'like', "%{$referentToFind}%")
+        $referents = Referent::where(function($query) use ($referentToFind) {
+            $query->where('name', 'like', "%{$referentToFind}%")
+                ->orWhere('last_name', 'like', "%{$referentToFind}%");
+        })
            /* ->whereHas('teams', function ($query) use ($teamId) {
                 $query->where('team_id', $teamId);
             })*/
@@ -29,6 +30,6 @@ class ReferentController extends Controller
             })
             ->get();
 
-        return response()->json($referents->unique('last_name'));
+        return response()->json($referents);
     }
 }

@@ -66,6 +66,11 @@
      scope: string;
  }>();
 
+ const emit = defineEmits<{
+     'referent-added': [data: any];
+     error: [error: any];
+ }>();
+
  const closeDropdown = () => {
      setTimeout(() => {
          dropdownVisible.value = false;
@@ -73,7 +78,7 @@
  };
 
  const addReferentToPoint = async (referent: object) => {
-     console.log(referent)
+
      loadingFetchReferents.value = true;
      try {
          const response = await axios.post(
